@@ -3,11 +3,11 @@ struct Matcher {
 }
 
 impl Matcher {
-    fn Match(&self, expected: &mut [i32], actual: &mut [i32], clipLimit: i32, delta: u32) -> bool {
+    fn Match(&self, expected: &mut [i32], actual: &mut [i32], clip_limit: i32, delta: u32) -> bool {
         // Clip "too-large" values
         for x in actual.iter_mut() {
-            if *x > clipLimit {
-                *x = clipLimit;
+            if *x > clip_limit {
+                *x = clip_limit;
             }
         } 
         // Check for length differences
@@ -26,9 +26,31 @@ impl Matcher {
 }
 
 fn main() {
-    let matcher = Matcher {};
-    let mut expected = [10, 50, 30, 98];
-    let mut actual = [12, 55, 25, 110];
-    let result = matcher.Match(&mut expected, &mut actual, 100, 5);
-    println!("{}", result);
+
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    
+    #[test]
+    fn it_should_match() {
+        let matcher = Matcher {};
+        let mut expected = [10, 50, 30, 98];
+        let mut actual = [12, 55, 25, 110];
+        let result = matcher.Match(&mut expected, &mut actual, 100, 5);
+        
+        assert_eq!(result, true);
+    }
+
+    #[test]
+    fn it_should_not_match() {
+        let matcher = Matcher {};
+        let mut expected = [10, 50, 30, 98];
+        let mut actual = [10, 60, 30, 98];
+        let result = matcher.Match(&mut expected, &mut actual, 100, 5);
+        
+        assert_eq!(result, false);
+    }
 }
